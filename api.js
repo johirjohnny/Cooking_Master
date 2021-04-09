@@ -4,13 +4,19 @@ const message = document.getElementById('message');
 const details = document.getElementById('details');
 
 
+window.onload = function () {
+    message.style.display = 'none';
+    details.style.display = 'none';
+    getFoodDetails('a');
+};
+
 searchBtn.addEventListener('click', function () {
     const keyword = document.getElementById('keyword').value;
     document.getElementById('keyword').value = '';
     allFoodsHere.innerHTML = '';
 
     if (keyword === '') {
-        const msg = document.getElementById('message');
+
         message.style.display = 'block';
         details.style.display = 'none';
     } else {
@@ -58,22 +64,25 @@ const renderFoodInfo = food => {
 
     const ingredients = [];
     for (let i = 1; i <= 20; i++) {
-        ingredients.push(`${food[`strIngredient${i}`]}`);
-
+        if (food[`strIngredient${i}`]) {
+            ingredients.push(`${food[`strIngredient${i}`]} - ${food[`strMeasure${i}`]}`);
+        } else {
+            break;
+        }
     }
 
     const detailsDiv = document.getElementById('details');
     detailsDiv.innerHTML = `
-            <div class="details-container">
-                <img src="${food.strMealThumb}" alt="">
-                <h4>${food.strMeal}</h4>
-                <h5>Ingredients</h5>
-                <ul class="mb-0">
-                    ${ingredients.map((ingredient) => `
-                        <li><i class="fa fa-check-square"></i>${ingredient}</li>
-                    `)}
-                </ul>
-            </div>
-        `
+        <div class="details-container">
+            <img class="img-fluid rounded mb-4" src="${food.strMealThumb}" alt="">
+            <h4 class="h4-text py-4 px-2 mb-0">${food.strMeal}</h4>
+            <h5 class="h5-text pt-3 pb-2">Ingredients</h5>
+            <ul class="mb-0">
+                ${ingredients.map((ingredient) => `
+                    <li><i class="fa fa-check-square"></i>${ingredient}</li>
+                `).join('')}
+            </ul>
+        </div>
+    `
 }
 
